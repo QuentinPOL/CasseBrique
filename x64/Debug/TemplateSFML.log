@@ -1,0 +1,24 @@
+﻿  Ball.cpp
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(9): warning C4244: 'argument' : conversion de 'time_t' en 'unsigned int', perte possible de données
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(18): warning C4244: '=' : conversion de 'double' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(19): warning C4244: '=' : conversion de 'double' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(24): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(25): warning C4244: '=' : conversion de 'int' en 'T', perte possible de données
+          with
+          [
+              T=float
+          ]
+c:\users\administrateur\sfml\templatesfml_vscommunity2017\ball.cpp(29): warning C4244: 'argument' : conversion de 'int' en 'float', perte possible de données
+  TemplateSFML.vcxproj -> C:\Users\Administrateur\SFML\TemplateSFML_VSCommunity2017\x64\Debug\TemplateSFML.exe
