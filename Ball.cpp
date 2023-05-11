@@ -1,4 +1,7 @@
+#define _USE_MATH_DEFINES
+
 #include "Ball.h"
+#include <math.h>
 
 bool Ball::isRandInitialized = false;
 
@@ -115,8 +118,7 @@ void Ball::manageCollisionWithPlayerOrBrick(Player* player, Brick* brick)
 	{
 		// Vérifie si la balle touche la plateforme
 		if (position.y + 2 * radius >= player->getPosition().y && position.y + 2 * radius <= player->getPosition().y + player->getSize().y &&
-			position.x + 2 * radius >= player->getPosition().x &&
-			position.x <= player->getPosition().x + player->getSize().x)
+			position.x + 2 * radius >= player->getPosition().x && position.x <= player->getPosition().x + player->getSize().x)
 		{
 			// Calcule la position relative de la balle par rapport à la plateforme
 			double relativeIntersectX = position.x + radius - player->getPosition().x - player->getSize().x / 2.0;
@@ -124,13 +126,13 @@ void Ball::manageCollisionWithPlayerOrBrick(Player* player, Brick* brick)
 			// Normalise la position relative de la balle
 			double normalizedRelativeIntersectionX = relativeIntersectX / (player->getSize().x / 2.0);
 
-			// Calcule l'angle de rebond de la balle
-			double angle = normalizedRelativeIntersectionX * 30;
+			// Calcule l'angle de rebond de la balle en radian
+			double angle = normalizedRelativeIntersectionX * (M_PI / 3);
 
 			// Change la direction de la balle en fonction de l'angle de rebond
 			setAngle(angle);
 
-			// Déplace la balle en dehors de la platerforme
+			// Déplace la balle en dehors de la plateforme
 			position.y = player->getPosition().y - 2 * radius - 0.1f;
 			direction.y = -std::abs(direction.y);
 		}
@@ -149,46 +151,15 @@ void Ball::manageCollisionWithPlayerOrBrick(Player* player, Brick* brick)
 			double deltaX = brick->getSize().x / 2.0 - std::abs(intersectX);
 			double deltaY = brick->getSize().y / 2.0 - std::abs(intersectY);
 
-			// Inverse la direction de la balle en fonction de l'axe de la collision
-			if (deltaX > deltaY)
-			{
-				// Collision horizontale
-				direction.x = -1;
-				position.x += (intersectX > 0 ? deltaX : -deltaX);
-			}
-			else
-			{
-				// Collision verticale
-				direction.y = -1;
-				position.y += (intersectY > 0 ? deltaY : -deltaY);
-			}
-
 			// Réduit la santé de la brique et change sa couleur
 			brick->hit();
 
-			// Changer la direction de la balle immédiatement après la collision
-			// en fonction de la position de la brique relative à la balle
-			if (intersectX > 0)
-			{
-				// La balle touche la brique sur le côté droit
-				direction.x = std::abs(direction.x);
-			}
-			else
-			{
-				// La balle touche la brique sur le côté gauche
-				direction.x = -std::abs(direction.x);
-			}
+			// Calcule l'angle de rebond de la balle en radians
+			double angle = std::atan2(intersectY, intersectX);
 
-			if (intersectY > 0)
-			{
-				// La balle touche la brique en bas
-				direction.y = std::abs(direction.y);
-			}
-			else
-			{
-				// La balle touche la brique en haut
-				direction.y = -std::abs(direction.y);
-			}
+			// Détermine la nouvelle direction de la balle en fonction de l'angle de rebond
+			direction.x = std::cos(angle);
+			direction.y = std::sin(angle);
 		}
 	}
 }

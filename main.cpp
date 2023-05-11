@@ -1,8 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Ball.h"
 
-
-
 int main(int argc, char **argv)
 {
 	// On créer les briques, une platerforme, une balle
@@ -72,13 +70,30 @@ int main(int argc, char **argv)
 	start.setPosition(window.getSize().x / 2.f, 400.f);
 	bool menuActive = true;
 
+	// Menu de Loose
+	sf::Text titleLoose("Vous avez perdu !!!", font, 64);
+	titleLoose.setOrigin(titleLoose.getLocalBounds().width / 2.f, titleLoose.getLocalBounds().height / 2.f);
+	titleLoose.setPosition(window.getSize().x / 2.f, 100.f);
+	sf::Text end("Dommage il faut relancer le jeu ! :/", font, 32);
+	end.setOrigin(end.getLocalBounds().width / 2.f, end.getLocalBounds().height / 2.f);
+	end.setPosition(window.getSize().x / 2.f, 400.f);
+	bool menuLoose = false;
+
+	// Menu de Win
+	sf::Text titleWin("Vous avez Gagner !!!", font, 64);
+	titleWin.setOrigin(titleWin.getLocalBounds().width / 2.f, titleWin.getLocalBounds().height / 2.f);
+	titleWin.setPosition(window.getSize().x / 2.f, 100.f);
+	sf::Text endWin("Il faut relancer le jeu si vous souhaitez rejouer ! :/", font, 32);
+	endWin.setOrigin(endWin.getLocalBounds().width / 2.f, endWin.getLocalBounds().height / 2.f);
+	endWin.setPosition(window.getSize().x / 2.f, 400.f);
+	bool menuWin = false;
 
 	// On définie le temps, la positon souris et le temps écouler et la pos Y à ne pas dépasser par la balle par rapport à la platerforme
 	sf::Clock clock;
 	sf::Vector2i mousePos;
 	float ellapsedTime = 0, posLineLoose = 550.f;
 	int healthPlayer = 5;
-	bool ballHasCrossedLine = false, collisionOccurred = false;;
+	bool ballHasCrossedLine = false;
 
 	lifeText.setString(std::string("Vies restantes : " + std::to_string(healthPlayer)));
 
@@ -121,7 +136,8 @@ int main(int argc, char **argv)
 			}
 		}
 
-		if (menuActive != true)
+		// Si le menu principal et plus activer et qu'il n'a pas perdu ou gagner
+		if (menuActive != true && menuLoose != true && menuWin != true)
 		{
 			// On fait bouger la balle en fonction du temps et gérer les collisions avec les bords de la fênetre et la plateforme
 			ball.move(ellapsedTime);
@@ -143,7 +159,8 @@ int main(int argc, char **argv)
 					}
 					else
 					{
-						window.close();
+						menuLoose = true;
+						// Arrêter le jeu
 					}
 				}
 			}
@@ -163,12 +180,23 @@ int main(int argc, char **argv)
 		// Ensuite Dessiner la fênêtre et le texte de vie
 		window.draw(rdr2);
 
-		if (menuActive) 
+		// Si le menu accueil est actif
+		if (menuActive == true)
 		{
 			window.draw(title);
 			window.draw(start);
 		}
-		else
+		else if (menuLoose == true) // Sinon si le menu looser est actif
+		{
+			window.draw(titleLoose);
+			window.draw(end);
+		}
+		else if (menuWin == true) // Sinon si le menu win est actif
+		{
+			window.draw(titleWin);
+			window.draw(endWin);
+		}
+		else if (menuActive != true && menuLoose != true && menuWin != true) // Sinon si le menu d'accueil et menu de loose et menu win pas actif
 		{
 			// On affiche le compteur de vies
 			window.draw(lifeText);
@@ -182,6 +210,12 @@ int main(int argc, char **argv)
 				if (!brick->isAlive()) // Si la brique n'a plus de vie
 				{
 					brick->destroyAndDelete(bricks);
+
+					if (bricks.size() == 0) // Si il n'y à plus de brique
+					{
+						menuWin = true; // Win
+						// Arrêter le jeu
+					}
 				}
 			}
 

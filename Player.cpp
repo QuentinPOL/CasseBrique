@@ -16,6 +16,18 @@ Player::~Player()
 
 void Player::draw(sf::RenderWindow& window)
 {
+	// On vérifie si la plateforme est en dehors de la fenêtre à gauche
+	if (position.x < 0) 
+	{
+		position.x = 0;
+	}
+
+	// On vérifie si la plateforme est en dehors de la fenêtre à droite
+	if (position.x + size.x > window.getSize().x)
+	{
+		position.x = window.getSize().x - size.x;
+	}
+
 	shape.setPosition(position);
 	window.draw(shape);
 }
